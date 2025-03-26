@@ -1,50 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>薇薇的投喂通知</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给你的小卡片</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+        
         body {
-            background: #ffe6f2;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Comic Sans MS', cursive;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            font-family: 'Ma Shan Zheng', cursive, sans-serif;
+            overflow: hidden;
         }
-        .message {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(255,0,150,0.2);
+        
+        .card {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            animation: fadeIn 1s;
+            overflow: hidden;
+            z-index: 1;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 15s linear infinite;
+            z-index: -1;
         }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .heart {
-            color: #ff69b4;
-            font-size: 2.5em;
-            animation: heartbeat 1.2s infinite;
+            position: relative;
+            width: 100px;
+            height: 90px;
+            margin: 0 auto 20px;
+            animation: heartbeat 1.5s ease-in-out infinite;
         }
+        
+        .heart:before, .heart:after {
+            position: absolute;
+            content: "";
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background: #ff6b6b;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .signature {
+            font-style: italic;
+            color: #ff6b6b;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn:hover {
+            background: #ff8e8e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        <h1>薇薇小天使<span class="heart">❤</span></h1>
-        <p style="font-size: 1.5em; color: #333;">
-            今晚的投喂是韩式拌饭哦～<br>
-            ✨有好吃的肉肉嘻嘻嘻^_^✨
-        </p>
-        <div style="font-size: 3em;">🍚🥩🥕🍳</div>
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <div class="card">
+        <div class="heart"></div>
+        <h1>VV小天使</h1>
+        <p>像清晨的阳光</p>
+        <p>像傍晚的微风</p>
+        <p>努力的用温柔治愈世界</p>
+        <p>今天也要按时吃饭</p>
+        <p>照顾好自己哦~</p>
+        <div class="signature">—— 大金毛憨憨</div>
+        <button class="btn" id="showMoreBtn">点击有惊喜</button>
     </div>
+
+    <script>
+        // 创建漂浮元素
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elements = ['🌸', '🍃', '✨', '💖', '☁️', '🌼'];
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.fontSize = (10 + Math.random() * 20) + 'px';
+                element.style.animationDuration = 5 + Math.random() * 10 + 's';
+                element.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(element);
+            }
+        }
+        
+        // 点击按钮显示更多内容
+        document.getElementById('showMoreBtn').addEventListener('click', function() {
+            const card = document.querySelector('.card');
+            if (card.innerHTML.includes('惊喜')) {
+                card.innerHTML = `
+                    <div class="heart"></div>
+                    <h1>VV小宝宝</h1>
+                    <p>探头探脑发现你</p>
+                    <p>跌跌撞撞奔向你</p>
+                    <p>原地转圈抱起你</p>
+                    <p>情绪低落想念你</p>
+                    <div class="signature">—— 嘻嘻，我来啦</div>
+                    <button class="btn" id="showMoreBtn">返回</button>
+                `;
+                document.getElementById('showMoreBtn').addEventListener('click', arguments.callee);
+            } else {
+                card.innerHTML = `
+                    <div class="heart"></div>
+                    <h1>VV小天使</h1>
+                    <p>像清晨的阳光</p>
+                    <p>像傍晚的微风</p>
+                    <p>努力的用温柔治愈世界</p>
+                    <p>今天也要按时吃饭</p>
+                    <p>照顾好自己哦~</p>
+                    <div class="signature">—— 大金毛憨憨</div>
+                    <button class="btn" id="showMoreBtn">点击有惊喜</button>
+                `;
+                document.getElementById('showMoreBtn').addEventListener('click', arguments.callee);
+            }
+        });
+        
+        // 初始化漂浮元素
+        createFloatingElements();
+    </script>
 </body>
 </html>
